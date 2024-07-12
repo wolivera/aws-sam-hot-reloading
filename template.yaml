@@ -1,0 +1,103 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM API Gateway Labmda template
+
+  A simple template that defines a Lambda function and an API Gateway in front of it.
+
+Globals:
+  Function:
+    Timeout: 30
+    Tracing: Active
+    
+Parameters:
+  NodeEnv:
+    Type: String
+    Default: ''
+
+Resources:
+  API:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: v1
+      EndpointConfiguration:
+        Type: REGIONAL
+      DefinitionBody:
+        Fn::Transform:
+          Name: AWS::Include
+          Parameters:
+            Location: ./open-api.yaml
+
+  HelloFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: dist/
+      Handler: functions/hello.lambdaHandler
+      Runtime: nodejs18.x
+      Timeout: 10      
+      Role: !GetAtt LambdaFunctionRole.Arn
+      Events:
+        HelloEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref API
+            Path: /hello
+            Method: GET
+      Environment:
+        Variables:
+          NODE_ENV: !Ref NodeEnv
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: es2020
+        Sourcemap: true
+        EntryPoints:
+        - functions/hello.js
+
+  LambdaFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - !Sub arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole
+
+  ApplicationResourceGroup:
+    Type: AWS::ResourceGroups::Group
+    Properties:
+      Name:
+        Fn::Sub: ApplicationInsights-SAM-${AWS::StackName}
+      ResourceQuery:
+        Type: CLOUDFORMATION_STACK_1_0
+  ApplicationInsightsMonitoring:
+    Type: AWS::ApplicationInsights::Application
+    Properties:
+      ResourceGroupName:
+        Ref: ApplicationResourceGroup
+      AutoConfigurationEnabled: 'true'
+
+  CodeSigningConfig:
+    Type: AWS::Lambda::CodeSigningConfig
+    Properties:
+      Description: "CSC for lambda using KMS operations to prevent code tampering"
+      AllowedPublishers:
+        SigningProfileVersionArns:
+          - !Ref CodeSigningProfileArn
+      CodeSigningPolicies:
+        UntrustedArtifactOnDeployment: "Enforce"
+
+Outputs:
+  BasePath: 
+    Description: Base path of the exposed API
+    Value: !Join ['', ['https://', !Ref API, '.execute-api.', !Ref AWS::Region, '.amazonaws.com/v1']]
+
+    

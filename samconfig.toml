@@ -1,0 +1,29 @@
+# More information about the configuration file can be found here:
+# https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-config.html
+version = 0.1
+disable_rollback = false
+
+[dev.global.parameters]
+stack_name = "aws-sam-hot-reloading"
+
+[dev.build.parameters]
+cached = true
+parallel = true
+
+[dev.validate.parameters]
+lint = true
+
+[dev.sync.parameters]
+watch = true
+
+[dev.deploy.parameters]
+capabilities = "CAPABILITY_IAM"
+confirm_changeset = true
+resolve_s3 = true
+s3_prefix = "aws-sam-hot-reloading"
+region = "us-east-2"
+image_repositories = []
+signing_profiles = """
+    HelloFunction="TrustedLambdaKMSDeployer"
+"""
+parameter_overrides = "NodeEnv=\"development\""

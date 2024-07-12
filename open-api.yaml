@@ -1,0 +1,39 @@
+openapi: 3.0.0
+info:
+  title: SAM API Gateway with Lambda
+  description: SAM API Blueprint with Lambda
+  version: 1.0.0
+
+paths:
+  /hello:
+    get:
+      tags:
+        - System
+      summary: Say hello
+      description: Returns a hello message
+      responses:
+        200:
+          description: Returns a hello message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Hello message
+        500:
+          description: An error happened
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Error message from execution
+      x-amazon-apigateway-integration:
+        uri:
+          Fn::Sub: arn:${AWS::Partition}:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HelloFunction.Arn}/invocations
+        httpMethod: POST
+        type: aws_proxy
