@@ -6,7 +6,7 @@
     "author": "SAM CLI",
     "license": "MIT",
     "scripts": {
-        "compile": "pnpm clean && pnpm install && tsc && cd dist && pnpm install",
+        "compile": "pnpm install && pnpm clean && tsc && cd dist && pnpm install",
         "clean": "rimraf ./dist && rimraf ./.aws-sam",
         "unit": "jest --coverage --verbose --testTimeout=30000 --forceExit --testPathPattern='.test.ts'",
         "lint": "eslint '*.ts' --quiet --fix",

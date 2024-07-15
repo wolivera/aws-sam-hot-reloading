@@ -11,7 +11,7 @@ export const handler = async (event: APIGatewayEvent, ctx: Context) => {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                message: 'Hello World!',
+                message: 'Hello World! Your function executed successfully!',
             }),
         };
     } catch (err) {
@@ -25,4 +25,4 @@ export const handler = async (event: APIGatewayEvent, ctx: Context) => {
 // e.g 
 // export const lambdaHandler = composeHandler(connectDb(), validateAuth(), setCurrentUser(), handler);
 //
-export const lambdaHandler = composeHandler(handler);
+export const lambdaHandler = handler;
