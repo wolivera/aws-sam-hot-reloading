@@ -1,6 +1,11 @@
 # AWS SAM Hot Reloading
 
-This repository contains a blueprint or boilerplate code for getting started with developing and testing an AWS lambda project using locally [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html). The project is using TypeScript, transpiling and bundling your source and modules, aiming to have a hot-reloading functionality. The motivation behind this project is explained in this [post](https://medium.com/).
+This repository contains a blueprint or boilerplate code for getting started with developing and testing an AWS lambda project using locally [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/what-is-sam.html). The project is using TypeScript, transpiling and bundling your source and modules, aiming to have a hot-reloading functionality. The motivation behind this project is explained in this [post]([https://medium.com/](https://medium.com/@liams_o/aws-sam-cli-speed-up-development-with-this-configuration-7439b8dc6c8e)).
+
+![AWSSamHotReloading-DEMO-ezgif com-optimize](https://github.com/user-attachments/assets/973871f5-6545-41c1-b240-4c281b5cbb6a)
+
+[Loom Demo](https://www.loom.com/share/ecd10102ce1e41d9b5130627e3207895?sid=9b50aec9-3c20-43cc-9bc7-2adcd5eae679)
+
 
 ## :information_source: Installing
 
